@@ -4,7 +4,10 @@ const User = require("../models/User");
 const handleErrors = (err) => {
   console.log(err.message, err.code);
   let errors = { email: "", password: "" };
-
+  //duplicate error code
+  if (err.code === 11000) {
+    errors.email = "that email is already registered";
+  }
   //validation errors
   if (err.message.includes("user validation failed")) {
     console.log(err.errors);
@@ -12,6 +15,8 @@ const handleErrors = (err) => {
       errors[properties.path] = properties.message;
     });
   }
+
+  return errors;
 };
 module.exports.signup_get = (req, res) => {
   res.render("signup");
